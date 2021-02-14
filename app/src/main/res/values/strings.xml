@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">PARBATH</string>
+    <string name="title_activity_maps">PARBATH</string>
+    <string name="estadistica_layout">Estadistica</string>
+    <string name="boton_opciones">Boton opciones de servicios y localización</string>
+    <string name="boton_posicion">Boton para determinar su posicion actual</string>
+    <string name="boton_bath">Boton para encontrar baño más cercano</string>
+    <string name="boton_parking">Boton para encontrar estacionamiento más cercano</string>
+    <string name="bottom_Sheet">Informacion previa del lugar elegido</string>
+    <string name="getLugares">lugares</string>
+    <string name="getPosicionLugares">posicionLugares</string>
+    <string name="getReportes">Reportes</string>
+    <string name="mensaje_bienvenida">Bienvenido a PAR BATH, a continuación se presenta
+        un mapa y 4 opciones, 1 se encuentra la opción para encontrar el sanitario más
+        cercano, arriba de esta opción se encuentra un botón para el reconocimiento que te
+        podría ser de ayuda, continuando en la parte inferior central se encuentra la opción
+        para determinar su ubicación actual, y a la derecha se encuentra el botón para encontrar el estacionamiento más cercano.</string>
+    <string name="interfazreporte">A continuación se presenta un formulario, primero deberas colocar tu nombre, seguido de apellido, y por ultimo
+    dejar tu comentario, reporte u opinión. Seguido del campo para dejar tu queja o comentario, puedes calificar a través de un máximo de 5 estrellas.</string>
+    <string name="desc_btn_reporte">botón que te llavara un formulario para realizar un comentario o reporte</string>
+    <string name="descripcion_nombre_formulario">Puede insertar aqui su nombre.</string>
+    <string name="descripcion_apellido_formulario">Puede insertar aqui su apellido.</string>
+    <string name="descripcion_comentario_formulario">Puede insertar aqui su comentario o comentario.</string>
+    <string name="descripcion_evaluacion_formulario">Envie su evaluacion de 1 a 5 estrellas.</string>
+    <string name="descripcion_boton_formulario">Boton para enviar la evaluacion.</string>
+    <string name="label_evaluar_formulario">Evalúanos</string>
+    <string name="label_btn_enviar_formulario">Enviar</string>
+    <string name="label_reporteopinion_formulario">Reporte u Opinión</string>
+    <string name="label_apellido_formulario">Nombre</string>
+    <string name="label_nombre_formulario">Apellido</string>
+    <string name="label_reporte_formulario">Reporte / Comentario</string>
+    <string name="hint_comentario_formulario">Comentario o reporte</string>
+</resources>

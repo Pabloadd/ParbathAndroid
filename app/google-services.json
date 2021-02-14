@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "764605063388",
+    "firebase_url": "https://mypracticemaps.firebaseio.com",
+    "project_id": "mypracticemaps",
+    "storage_bucket": "mypracticemaps.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:764605063388:android:6427cc71ee5ded1c",
+        "android_client_info": {
+          "package_name": "com.holamundo.pabloxd.practicemaps"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "764605063388-c83le5dplv42g8scg61a4t5ornncra0g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyASFIlToV1IQKPI_FoKuFTHHuLGzeOdRAs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "764605063388-c83le5dplv42g8scg61a4t5ornncra0g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
