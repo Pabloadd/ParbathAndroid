@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.holamundo.pabloxd.practicemaps">
+    package="com.parbathprojectmaps">
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
@@ -24,10 +24,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".AlternativaMapa"></activity>
-        <activity android:name=".FullScreen" />
+        <activity android:name="com.parbathprojectmaps.AlternativaMapa"></activity>
+        <activity android:name="com.parbathprojectmaps.FullScreen" />
         <activity
-            android:name=".MapsActivity"
+            android:name="com.parbathprojectmaps.MapsActivity"
             android:label="@string/title_activity_maps"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -46,20 +46,22 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAibeaKwmIGYBEOsbqoMgVYmxNIrsBsAQo" /> <!-- <activity -->
+            android:value="AIzaSyAGPEu3p-oMdCZAPyGXWNviNhO0WKQBRMs" /> <!-- <activity -->
+        <!--android:value="AIzaSyAibeaKwmIGYBEOsbqoMgVYmxNIrsBsAQo" />  <activity -->
+
         <!-- android:name=".MapsActivity" -->
         <!-- android:label="@string/title_activity_maps" /> -->
         <activity
-            android:name=".InformacionToilet"
+            android:name="com.parbathprojectmaps.InformacionToilet"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".formulario"
+            android:name="com.parbathprojectmaps.formulario"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".estadistica"
+            android:name="com.parbathprojectmaps.estadistica"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ListService"
+            android:name="com.parbathprojectmaps.ListService"
             android:screenOrientation="portrait" />
     </application>
 

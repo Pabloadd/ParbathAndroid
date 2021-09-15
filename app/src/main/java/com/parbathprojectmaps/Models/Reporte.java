@@ -1,4 +1,4 @@
-package com.holamundo.pabloxd.practicemaps.Models;
+package com.parbathprojectmaps.Models;
 
 import android.os.Parcel;
 import android.os.Parcelable;

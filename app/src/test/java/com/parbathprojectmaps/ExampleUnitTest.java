@@ -1,4 +1,4 @@
-package com.holamundo.pabloxd.practicemaps;
+package com.parbathprojectmaps;
 
 import org.junit.Test;
 

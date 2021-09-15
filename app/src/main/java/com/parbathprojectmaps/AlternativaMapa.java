@@ -1,13 +1,13 @@
-package com.holamundo.pabloxd.practicemaps;
+package com.parbathprojectmaps;
 
 import android.content.Intent;
+import android.location.Location;
 import android.speech.tts.TextToSpeech;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -18,11 +18,10 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.holamundo.pabloxd.practicemaps.Models.ServiceLocation;
-import com.holamundo.pabloxd.practicemaps.util.CustomAdpaterMapa;
+import com.parbathprojectmaps.Models.ServiceLocation;
+import com.parbathprojectmaps.util.CustomAdpaterMapa;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Locale;
 
 import javax.annotation.Nullable;
@@ -34,6 +33,7 @@ public class AlternativaMapa extends AppCompatActivity implements TextToSpeech.O
     private static CustomAdpaterMapa customAdpaterMapa;
     private FirebaseFirestore mDb;
     private TextToSpeech textToSpeech;
+    private Location location_user;
 
     @Override
     protected void onResume() {
@@ -49,6 +49,9 @@ public class AlternativaMapa extends AppCompatActivity implements TextToSpeech.O
         listView = (ListView) findViewById(R.id.list_servicelocation);
         textToSpeech = new TextToSpeech(this,this);
         mDb = FirebaseFirestore.getInstance();
+
+        Bundle bundle = new Bundle(getIntent().getExtras());
+        location_user = (Location) bundle.get("position_user");
         consultaPositionServices();
         sentitizador("Welcome");
     }
@@ -88,22 +91,20 @@ public class AlternativaMapa extends AppCompatActivity implements TextToSpeech.O
     }
 
     public void ListaMarcadores(){
-        customAdpaterMapa = new CustomAdpaterMapa(serviceLocations,getApplicationContext());
+        customAdpaterMapa = new CustomAdpaterMapa(serviceLocations,getApplicationContext(),location_user);
         listView.setAdapter(customAdpaterMapa);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 ServiceLocation servs = serviceLocations.get(i);
-                String nombreLugar = servs.getLugares().getNombrelugar();
-                String ubicacion = servs.getUbicacion();
-                String distancia = "0";
+                String nombreLugar = servs.getPlace_description().getName_place();
+//                String ubicacion = servs.getLocation_path();
                 itemFromListSelected(nombreLugar);
             }
         });
-
-
-
     }
+
+
 
     private void itemFromListSelected(String nombreLugar) {
         Intent intent = new Intent(AlternativaMapa.this,ListService.class);

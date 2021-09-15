@@ -7,8 +7,8 @@
     <string name="boton_bath">Boton para encontrar baño más cercano</string>
     <string name="boton_parking">Boton para encontrar estacionamiento más cercano</string>
     <string name="bottom_Sheet">Informacion previa del lugar elegido</string>
-    <string name="getLugares">lugares</string>
-    <string name="getPosicionLugares">posicionLugares</string>
+    <string name="getLugares">places_information</string>
+    <string name="getPosicionLugares">markers_map</string>
     <string name="getReportes">Reportes</string>
     <string name="mensaje_bienvenida">Bienvenido a PAR BATH, a continuación se presenta
         un mapa y 4 opciones, 1 se encuentra la opción para encontrar el sanitario más

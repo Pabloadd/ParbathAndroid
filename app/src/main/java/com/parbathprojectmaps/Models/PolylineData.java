@@ -1,4 +1,4 @@
-package com.holamundo.pabloxd.practicemaps.Models;
+package com.parbathprojectmaps.Models;
 
 import com.google.android.gms.maps.model.Polyline;
 import com.google.maps.model.DirectionsLeg;

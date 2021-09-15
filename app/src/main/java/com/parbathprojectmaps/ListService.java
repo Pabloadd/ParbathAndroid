@@ -1,11 +1,10 @@
-package com.holamundo.pabloxd.practicemaps;
+package com.parbathprojectmaps;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.os.Parcelable;
 import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -20,18 +19,17 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.holamundo.pabloxd.practicemaps.Models.ToiletPlaces;
-import com.holamundo.pabloxd.practicemaps.util.CustomAdapter;
+import com.parbathprojectmaps.Models.ToiletPlaces;
+import com.parbathprojectmaps.util.CustomAdapter;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 import javax.annotation.Nullable;
 
 public class ListService extends AppCompatActivity implements TextToSpeech.OnInitListener {
 
-    private static final String TAG = "";
+    private static final String TAG = "INFO LIST > ";
     ArrayList<ToiletPlaces> services = new ArrayList<>();
     ListView listView;
 
@@ -73,6 +71,12 @@ public class ListService extends AppCompatActivity implements TextToSpeech.OnIni
     }
 
     @Override
+    protected void onDestroy() {
+        textoAvoz.shutdown();
+        super.onDestroy();
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
     }
@@ -84,9 +88,9 @@ public class ListService extends AppCompatActivity implements TextToSpeech.OnIni
 
     private void newQueryforPlaceSelected(String placeToFind) {
         CollectionReference referenciLista = serviceDB.collection(getString(R.string.getLugares));
-
+        Log.d(TAG,"Lugar a consultar " + placeToFind);
         Query query = referenciLista.
-              whereEqualTo("nombrelugar",placeToFind);
+              whereEqualTo("name_place",placeToFind);
 
         query.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -103,13 +107,14 @@ public class ListService extends AppCompatActivity implements TextToSpeech.OnIni
                     for (QueryDocumentSnapshot doc : queryDocumentSnapshots){
                         ToiletPlaces toiletInfo = doc.toObject(ToiletPlaces.class);
                         services.add(toiletInfo);
-                        Log.d(TAG,"Info List " + toiletInfo.getNombrelugar() + ", " +
-                                toiletInfo.getTipo() + ", "+toiletInfo.getUbicacion());
+                        Log.d(TAG,"Info List " + toiletInfo.getName_place() + ", " +
+                                toiletInfo.getServiceType() + ", "+toiletInfo.getUbicationReference());
                     }
                     makingTheList();
                 }
             }
         });
+        Log.d(TAG,"Que! ya! ");
     }// fin del metodo
 
     public void makingTheList(){
@@ -122,14 +127,14 @@ public class ListService extends AppCompatActivity implements TextToSpeech.OnIni
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 ToiletPlaces servs = services.get(i);
 
-                String idservicio = servs.getIdServicio();
-                String lugar = servs.getNombrelugar();
-                String ubicacion = servs.getUbicacion();
-                String horario = servs.getHorario();
+                String idservicio = servs.getIdService();
+                String lugar = servs.getName_place();
+                String ubicacion = servs.getUbicationReference();
+                String horario = servs.getSchedules();
 
-                String descripcion = servs.getDescripcion();
-                String tipo = servs.getTipo();
-                ArrayList<String> fotos = servs.getFoto();
+                String descripcion = servs.getDescription();
+                String tipo = servs.getServiceType();
+                ArrayList<String> fotos = servs.getImages();
                 Log.d(TAG," INFORMACION FOTO: " + fotos);
                 informacionServicioSelecionado(lugar, ubicacion, horario, descripcion, tipo, idservicio,fotos);
             }

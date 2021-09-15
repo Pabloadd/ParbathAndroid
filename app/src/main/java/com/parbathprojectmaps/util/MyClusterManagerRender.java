@@ -1,4 +1,4 @@
-package com.holamundo.pabloxd.practicemaps.util;
+package com.parbathprojectmaps.util;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -12,8 +12,8 @@ import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
 import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 import com.google.maps.android.ui.IconGenerator;
-import com.holamundo.pabloxd.practicemaps.Models.ClusterMarker;
-import com.holamundo.pabloxd.practicemaps.R;
+import com.parbathprojectmaps.Models.ClusterMarker;
+import com.parbathprojectmaps.R;
 
 public class MyClusterManagerRender extends DefaultClusterRenderer<ClusterMarker>{
 

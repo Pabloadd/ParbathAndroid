@@ -1,4 +1,4 @@
-package com.holamundo.pabloxd.practicemaps.util;
+package com.parbathprojectmaps.util;
 
 import android.content.Context;
 import android.util.Log;
@@ -11,10 +11,8 @@ import android.widget.ArrayAdapter;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.holamundo.pabloxd.practicemaps.Models.Reporte;
-import com.holamundo.pabloxd.practicemaps.R;
-
-import org.w3c.dom.Text;
+import com.parbathprojectmaps.Models.Reporte;
+import com.parbathprojectmaps.R;
 
 import java.util.ArrayList;
 

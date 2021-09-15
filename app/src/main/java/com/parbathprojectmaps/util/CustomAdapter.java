@@ -1,4 +1,4 @@
-package com.holamundo.pabloxd.practicemaps.util;
+package com.parbathprojectmaps.util;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,8 +10,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.holamundo.pabloxd.practicemaps.Models.ToiletPlaces;
-import com.holamundo.pabloxd.practicemaps.R;
+import com.parbathprojectmaps.Models.ToiletPlaces;
+import com.parbathprojectmaps.R;
 
 import java.util.ArrayList;
 
@@ -67,9 +67,9 @@ public class CustomAdapter extends ArrayAdapter<ToiletPlaces>
         result.startAnimation(animation);
         lastPosition = position;
 
-        viewHolder.txtlugar.setText(toiletPlaces.getNombrelugar());
-        viewHolder.txtubicacion.setText(toiletPlaces.getUbicacion());
-        viewHolder.tipoService.setText(toiletPlaces.getTipo());
+        viewHolder.txtlugar.setText(toiletPlaces.getName_place());
+        viewHolder.txtubicacion.setText(toiletPlaces.getUbicationReference());
+        viewHolder.tipoService.setText(toiletPlaces.getServiceType());
 //        viewHolder.icono.setImageResource(Integer.decode(toiletPlaces.getIcono()));
 
         return converView;

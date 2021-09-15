@@ -1,35 +1,42 @@
 {
   "project_info": {
-    "project_number": "764605063388",
-    "firebase_url": "https://mypracticemaps.firebaseio.com",
-    "project_id": "mypracticemaps",
-    "storage_bucket": "mypracticemaps.appspot.com"
+    "project_number": "1017581966904",
+    "firebase_url": "https://parbath-ios-maps-default-rtdb.firebaseio.com",
+    "project_id": "parbath-ios-maps",
+    "storage_bucket": "parbath-ios-maps.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:764605063388:android:6427cc71ee5ded1c",
+        "mobilesdk_app_id": "1:1017581966904:android:e0aa386ca8487690c5b8cd",
         "android_client_info": {
-          "package_name": "com.holamundo.pabloxd.practicemaps"
+          "package_name": "com.parbathprojectmaps"
         }
       },
       "oauth_client": [
         {
-          "client_id": "764605063388-c83le5dplv42g8scg61a4t5ornncra0g.apps.googleusercontent.com",
+          "client_id": "1017581966904-q7flf71mmtjkdhc0ranja9nlp2d4ckd7.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyASFIlToV1IQKPI_FoKuFTHHuLGzeOdRAs"
+          "current_key": "AIzaSyBSgL_Ta_wENIKuUDIw_Kl2_flX1TzRvQE"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "764605063388-c83le5dplv42g8scg61a4t5ornncra0g.apps.googleusercontent.com",
+              "client_id": "1017581966904-q7flf71mmtjkdhc0ranja9nlp2d4ckd7.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "1017581966904-ok9ckbupoejugjg4m0d1tj7ek0so3r40.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.samuel.ParbathProject"
+              }
             }
           ]
         }

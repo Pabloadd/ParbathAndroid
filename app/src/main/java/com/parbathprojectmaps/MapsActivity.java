@@ -1,4 +1,4 @@
-package com.holamundo.pabloxd.practicemaps;
+package com.parbathprojectmaps;
 
 import android.Manifest;
 import android.content.ActivityNotFoundException;
@@ -21,17 +21,16 @@ import android.os.Looper;
 import android.provider.Settings;
 import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomSheetBehavior;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -64,11 +63,11 @@ import com.google.maps.android.clustering.ClusterManager;
 import com.google.maps.internal.PolylineEncoding;
 import com.google.maps.model.DirectionsResult;
 import com.google.maps.model.DirectionsRoute;
-import com.holamundo.pabloxd.practicemaps.Models.ClusterMarker;
-import com.holamundo.pabloxd.practicemaps.Models.PolylineData;
-import com.holamundo.pabloxd.practicemaps.Models.ServiceLocation;
-import com.holamundo.pabloxd.practicemaps.Models.ToiletPlaces;
-import com.holamundo.pabloxd.practicemaps.util.MyClusterManagerRender;
+import com.parbathprojectmaps.Models.ClusterMarker;
+import com.parbathprojectmaps.Models.PolylineData;
+import com.parbathprojectmaps.Models.ServiceLocation;
+import com.parbathprojectmaps.Models.ToiletPlaces;
+import com.parbathprojectmaps.util.MyClusterManagerRender;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -81,7 +80,7 @@ import javax.annotation.Nullable;
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener,
         GoogleMap.OnPolylineClickListener, TextToSpeech.OnInitListener {
 
-    private static final String TAG = "";
+    private static final String TAG = "INFO_LOG";
     private GoogleMap mMap;
     private Marker marcador;
     double lat = 0.0;
@@ -161,12 +160,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         setContentView(R.layout.activity_maps);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
 
-//        mGps = (ImageView) findViewById(R.id.ic_gps);
-//        mGps = (FloatingActionButton) findViewById(R.id.fab);
-//        bBath = (FloatingActionButton) findViewById(R.id.bath);
-//        bPArk = (FloatingActionButton) findViewById(R.id.park);
-        bMicro = (FloatingActionButton) findViewById(R.id.micro);
-
         altgps = (ImageButton) findViewById(R.id.imgbtn_gps);
         altbath = (ImageButton) findViewById(R.id.imgbtn_bath);
         altparking = (ImageButton) findViewById(R.id.imgbtn_parking);
@@ -219,25 +212,22 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         for (ServiceLocation servicesMarks : serviceLocationArrayList) {
             Log.d(TAG, "Entro en el for que toiletPlaces");
-//            Log.d(TAG,"Data Consulta WINS : Lugar" + toiletPlaces.getNombrelugar() +
-//                    "Posicion" + toiletPlaces.getPosicion().getLatitude() +", "+
-//                    toiletPlaces.getPosicion().getLongitude());
             try {
                 String snippet = "";
                 int iconoMark = R.drawable.ic_toilet;
                 try {
 //                    Integer.parseInt(servicesMarks.getLugares().getIcono());
-                    iconoMark = Integer.decode(servicesMarks.getLugares().getIcono());
+                    iconoMark = Integer.decode(servicesMarks.getPlace_description().getIcon());
                     Log.d(TAG, "Si hay icono");
                 } catch (NumberFormatException e) {
-                    Log.d(TAG, "AddMarcadores: no Icono for " + servicesMarks.getLugares().getNombrelugar());
+                    Log.d(TAG, "AddMarcadores: no Icono for " + servicesMarks.getPlace_description().getName_place());
                 }// fin try para colocar icono a los marcadores
                 Log.d(TAG, "Agregando Marcadores...");
                 ClusterMarker newClusterMarker = new ClusterMarker(
-                        new LatLng(servicesMarks.getPosicion().getLatitude(),
-                                servicesMarks.getPosicion().getLongitude()),
-                        servicesMarks.getLugares().getNombrelugar(), "", iconoMark,
-                        servicesMarks.getLugares());
+                        new LatLng(servicesMarks.getPosition_lat_long().getLatitude(),
+                                servicesMarks.getPosition_lat_long().getLongitude()),
+                        servicesMarks.getPlace_description().getName_place(), "", iconoMark,
+                        servicesMarks.getPlace_description());
 
                 mClusterManager.addItem(newClusterMarker);
                 clusterMarkers.add(newClusterMarker);
@@ -272,6 +262,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
 
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -285,86 +276,66 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     //metodo que obtiene la data del FireBase relacionada a los servicios
     private void getInfoServices() {
-        toiletPlacesArrayList.clear();
-        CollectionReference lugaresToilets = mDb.collection(getString(R.string.getLugares));
 
-        Query lugaresQuery = lugaresToilets;
+        if (toiletPlacesArrayList.isEmpty()){
+            toiletPlacesArrayList.clear();
+            CollectionReference lugaresToilets = mDb.collection(getString(R.string.getLugares));
 
-        lugaresQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        ToiletPlaces toiletp = document.toObject(ToiletPlaces.class);
-                        //la informacion se guarda en arraylist la cual es un objeto de
-                        //la clase toiletPlaces
-                        toiletPlacesArrayList.add(toiletp);
-                    }
-                    for (ToiletPlaces toiletPlacesRow : toiletPlacesArrayList) {
-                        Log.d(TAG, "Data de ToiletInfo " + toiletPlacesRow.getNombrelugar()
-                                + " posicion " + toiletPlacesRow.getIcono());
-                    }
+            Query lugaresQuery = lugaresToilets;
+
+            lugaresQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            ToiletPlaces toiletp = document.toObject(ToiletPlaces.class);
+                            //la informacion se guarda en arraylist la cual es un objeto de
+                            //la clase toiletPlaces
+                            toiletPlacesArrayList.add(toiletp);
+                        }
+//                    for (ToiletPlaces toiletPlacesRow : toiletPlacesArrayList) {
+//                        Log.d(TAG, "Data de ToiletInfo " + toiletPlacesRow.getNamePlace()
+//                                + " posicion " + toiletPlacesRow.getIcon());
+//                    }
 //                    Mensaje("Consulta WINS 1!!!");
-                } else {
-//                    Mensaje("Ccnsulta LOSE!!!");
+                    } else {
+                    Log.d(TAG, "ERROR en consulta de info services" );
+                    }
                 }
-            }
-        });
+            });
+        }
+
         Log.d(TAG, "El tamano del array infoplaces " + toiletPlacesArrayList.size());
     }//fin del metodo getInfoServices
 
     private void getPosicionServices() {
+        if (serviceLocationArrayList.isEmpty()){
+            CollectionReference lugaresServices = mDb.collection(getString(R.string.getPosicionLugares));
 
-        CollectionReference lugaresServices = mDb.collection(getString(R.string.getPosicionLugares));
-
-        Query lugaresQuery = lugaresServices;
-        lugaresQuery.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                if (e != null) {
-                    Log.e(TAG, "onEvent: Listen lugaresServices failed.", e);
-                    return;
-                }
-
-                if (queryDocumentSnapshots != null) {
-                    serviceLocationArrayList.clear();
-                    serviceLocationArrayList = new ArrayList<>();
-                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                        ServiceLocation services = doc.toObject(ServiceLocation.class);
-                        serviceLocationArrayList.add(services);
+            Query lugaresQuery = lugaresServices;
+            lugaresQuery.addSnapshotListener(new EventListener<QuerySnapshot>() {
+                @Override
+                public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                    if (e != null) {
+                        Log.e(TAG, "onEvent: Listen lugaresServices failed.", e);
+                        return;
                     }
-                    makingMarkerFromFireBaseStore();
 
-                    Log.d(TAG, "El tamano del array Positionplaces " + serviceLocationArrayList.size());
+                    if (queryDocumentSnapshots != null) {
+                        serviceLocationArrayList.clear();
+                        serviceLocationArrayList = new ArrayList<>();
+                        for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                            Log.d(TAG, "data >> " + doc.getData());
+                            ServiceLocation services = doc.toObject(ServiceLocation.class);
+                            serviceLocationArrayList.add(services);
+                        }
+                        makingMarkerFromFireBaseStore();
+
+                        Log.d(TAG, "El tamano del array Positionplaces " + serviceLocationArrayList.size());
+                    }
                 }
-            }
-
-
-        });
-
-        /*codigo de consulta anterior*/
-//        lugaresQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                if (task.isSuccessful()){
-//                    for(QueryDocumentSnapshot document : task.getResult()){
-//                        ServiceLocation servicesPos = document.toObject(ServiceLocation.class);
-//                        //la informacion se guarda en arraylist la cual es un objeto de
-//                        //la clase toiletPlaces
-//                        serviceLocationArrayList.add(servicesPos);
-//                    }
-//                    for(ServiceLocation servicePlacesRow : serviceLocationArrayList){
-//                        Log.d(TAG, "Data de ToiletLocation "+ servicePlacesRow.getLugares().getNombrelugar()
-//                                + " posicion " + servicePlacesRow.getPosicion().getLatitude() + ", "
-//                                + servicePlacesRow.getPosicion().getLongitude());
-//                    }
-//                    Mensaje("Consulta WINS 2!!!");
-//
-//                }else{
-//                    Mensaje("Ccnsulta LOSE!!!");
-//                }
-//            }
-//        });
+            });
+        }
 
     }
 
@@ -433,12 +404,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });*/
 
-        bMicro.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setupVoiceRecognicion();
-            }
-        });
+//        bMicro.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                setupVoiceRecognicion();
+//            }
+//        });
 
         bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
@@ -506,17 +477,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     // o lanzar un evento diferente
     public boolean onMarkerClick(final Marker marker) {
         markerPlace = marker.getTitle();
-//        if (marker.equals(utp_parking)){
-//            Log.d(TAG,"Cambiando icono de BottomSheet a utpParking");
-//            iconoBottomSheet.setImageResource(R.drawable.ic_parking);
-//            iconSeleceted = "Park";
-//        }else if(marker.equals(utp_toilet)){
-//            Log.d(TAG,"Cambiando icono de BottomSheet a utpToilet");
-//            iconoBottomSheet.setImageResource(R.drawable.ic_toilet);
-//            iconSeleceted = "Bath";
-//        }else{
-//            Log.d(TAG,"Error no sa cambio ningun icono de BottomSheet");
-//        }
 
         calculateDirections(marker);
 
@@ -533,8 +493,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     } // fin onMarkerClick
 
     private void SensorAcelerometroActive() {
-//        if(bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED){
-//            Toast.makeText(this, "BS collapse", Toast.LENGTH_LONG).show();
         //AGREGAR CODIGO DE TEXTO A VOZ...
         if (sensor == null) {
             // funcion de voz diciendo que no posee sensor acelerometro
@@ -548,7 +506,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     if (x < -5) {
                         Intent i = new Intent(MapsActivity.this, AlternativaMapa.class);
 //                        i.putExtra("lugarService","Universidad Tecnologica de Panama - Cocle");
-                        //i.putExtra("LugaresServicios",serviceLocationArrayList);
+//                        i.putExtra("LugaresServicios",serviceLocationArrayList);
+                        i.putExtra("position_user",userLocation);
                         startActivity(i);
                         //textToSpeech.stop();
                         stop();
@@ -576,6 +535,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     //metodo relacionado al sensor acelerometro
     private void stop() {
         sensorManager.unregisterListener(sensorEventListener);
+    }
+
+    @Override
+    protected void onDestroy() {
+        textToSpeech.stop();
+        super.onDestroy();
     }
 
     @Override
@@ -719,13 +684,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
         getLocationPermission();
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             return;
         }
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, (LocationListener) Local);
@@ -736,7 +694,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     boolean rstlocation = false;
     private void setLocation(Location location) {
-
         if( location.getLatitude() != 0.0 && location.getLongitude() != 0.0 ){
 
             if (rstlocation == false) {
@@ -892,11 +849,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         if (cadena.contains("Coclé") || cadena.contains("penonomé") || cadena.contains("coclé")){
             textToSpeech.speak("Iniciando busqueda",TextToSpeech.QUEUE_FLUSH,null);
             for (ServiceLocation objServicelocat : serviceLocationArrayList){
-                if (objServicelocat.getLugares().getNombrelugar().contains("Cocle")){
+                if (objServicelocat.getPlace_description().getName_place().contains("Cocle")){
                     acumulador += 1;
-                    nombreLugares.add(objServicelocat.getLugares().getNombrelugar());
-                    rlatitud = objServicelocat.getPosicion().getLatitude();
-                    rlongitud = objServicelocat.getPosicion().getLongitude();
+                    nombreLugares.add(objServicelocat.getPlace_description().getName_place());
+                    rlatitud = objServicelocat.getPosition_lat_long().getLatitude();
+                    rlongitud = objServicelocat.getPosition_lat_long().getLongitude();
 
                 }else{
                     break;
