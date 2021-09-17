@@ -32,6 +32,7 @@
                 android:layout_marginStart="0dp"
                 android:layout_marginTop="0dp"
                 android:layout_marginBottom="5dp"
+                android:contentDescription="imagenes del local como referencia"
                 app:layout_constraintBottom_toTopOf="@+id/scrollView3"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
@@ -135,35 +136,6 @@
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:paddingBottom="3dp">
-
-                    <ImageView
-                        android:id="@+id/imageView7"
-                        android:layout_width="44dp"
-                        android:layout_height="28dp"
-
-                        android:layout_alignStart="@+id/imageView8"
-                        app:srcCompat="@drawable/prevencion"
-                        tools:layout_editor_absoluteX="88dp"
-                        tools:layout_editor_absoluteY="377dp" />
-
-                    <Button
-                        android:id="@+id/button2"
-                        android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginBottom="5dp"
-                        android:background="@android:color/holo_red_dark"
-                        android:text="Reporte"
-                        android:textColor="@android:color/background_light"
-                        android:textSize="18sp"
-                        tools:layout_editor_absoluteX="168dp"
-                        tools:layout_editor_absoluteY="376dp" />
-                </TableRow>
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
                     android:baselineAligned="false"
                     android:paddingBottom="3dp">
 
@@ -178,7 +150,7 @@
 
                     <TextView
                         android:id="@+id/txtMoreInfo"
-                        android:layout_width="207dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textMultiLine"
                         android:text="TextView"
@@ -216,18 +188,19 @@
 
     <ImageView
         android:id="@+id/imgbtn_reporte"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="79dp"
+        android:layout_height="71dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:background="@android:color/holo_red_dark"
+        android:background="@color/colorPrimaryDark"
         android:clickable="true"
         android:contentDescription="@string/desc_btn_reporte"
         android:focusable="auto"
         android:padding="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/prevencion" />
+        app:srcCompat="@drawable/ic_add_comment"
+        tools:srcCompat="@drawable/ic_add_comment" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

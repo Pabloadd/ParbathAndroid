@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.parbathprojectmaps.Models.ServiceLocation;
 import com.parbathprojectmaps.R;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class CustomAdpaterMapa extends ArrayAdapter<ServiceLocation> implements View.OnClickListener{
@@ -21,6 +22,7 @@ public class CustomAdpaterMapa extends ArrayAdapter<ServiceLocation> implements 
     ArrayList<ServiceLocation> serviceLocations;
     Context context;
     Location location_user;
+    DecimalFormat format_float = new DecimalFormat("#.##");
     private static class ViewHolder{
         TextView txvUbicacion;
         TextView txvNombreLugar;
@@ -80,12 +82,15 @@ public class CustomAdpaterMapa extends ArrayAdapter<ServiceLocation> implements 
 
     private String getmessageDistanceto(float distance_to){
         String message = "?";
+        String distance_str = "";
         float auxdistance_to = 0;
         if (distance_to >= 1000.0){
             auxdistance_to = distance_to / 1000;
-            message = String.valueOf(auxdistance_to) + " km";
+            distance_str = format_float.format(auxdistance_to);
+            message = String.valueOf(distance_str) + " km";
         }else if (distance_to < 1000.0){
-            message = String.valueOf(distance_to) + " metros";
+            distance_str = format_float.format(auxdistance_to);
+            message = String.valueOf(distance_str) + " metros";
         }
         Log.i("Info distance > ","distancia obtenida " + message);
         return message;

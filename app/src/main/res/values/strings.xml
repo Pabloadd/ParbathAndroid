@@ -17,7 +17,7 @@
         para determinar su ubicación actual, y a la derecha se encuentra el botón para encontrar el estacionamiento más cercano.</string>
     <string name="interfazreporte">A continuación se presenta un formulario, primero deberas colocar tu nombre, seguido de apellido, y por ultimo
     dejar tu comentario, reporte u opinión. Seguido del campo para dejar tu queja o comentario, puedes calificar a través de un máximo de 5 estrellas.</string>
-    <string name="desc_btn_reporte">botón que te llavara un formulario para realizar un comentario o reporte</string>
+    <string name="desc_btn_reporte">botón para dejar tu comentario o experiencia sobre el lugar visitado</string>
     <string name="descripcion_nombre_formulario">Puede insertar aqui su nombre.</string>
     <string name="descripcion_apellido_formulario">Puede insertar aqui su apellido.</string>
     <string name="descripcion_comentario_formulario">Puede insertar aqui su comentario o comentario.</string>

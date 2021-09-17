@@ -107,7 +107,7 @@ public class  InformacionToilet extends AppCompatActivity implements TextToSpeec
         textubiacion = (TextView) findViewById(R.id.txtUbicacion);
         texthorario = (TextView) findViewById(R.id.txtHorario);
         textestado = (TextView) findViewById(R.id.txtEstado);
-        reporte = (Button) findViewById(R.id.button2);
+//        reporte = (Button) findViewById(R.id.button2);
         txtmoreInfo = (TextView) findViewById(R.id.txtMoreInfo);
 
         textubiacion.setText(ubicacion);
