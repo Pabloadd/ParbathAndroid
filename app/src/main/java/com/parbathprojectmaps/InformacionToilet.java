@@ -240,17 +240,6 @@ public class  InformacionToilet extends AppCompatActivity implements TextToSpeec
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if(id == R.id.estadistica){
-            Intent stadistic = new Intent(InformacionToilet.this,estadistica.class);
-            startActivity(stadistic);
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
 //    METODOS DE TEXTO A VOZ Y ASISTENTE DE VOZ
 
     public void voiceRecognition(){

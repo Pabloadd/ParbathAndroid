@@ -1,8 +1,10 @@
 package com.parbathprojectmaps;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.Sensor;
@@ -28,8 +30,6 @@ import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -64,6 +64,7 @@ import com.google.maps.internal.PolylineEncoding;
 import com.google.maps.model.DirectionsResult;
 import com.google.maps.model.DirectionsRoute;
 import com.parbathprojectmaps.Models.ClusterMarker;
+import com.parbathprojectmaps.Models.DialogModule;
 import com.parbathprojectmaps.Models.PolylineData;
 import com.parbathprojectmaps.Models.ServiceLocation;
 import com.parbathprojectmaps.Models.ToiletPlaces;
@@ -82,15 +83,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private static final String TAG = "INFO_LOG";
     private GoogleMap mMap;
-    private Marker marcador;
-    double lat = 0.0;
-    double lng = 0.0;
-    String mensaje1;
-    String direccion = "";
     //    private ImageView mGps; este fue reemplazodo por floating button
-    //  BOTONES FLOTANTES
-    private FloatingActionButton mGps, bBath, bPArk, bMicro;
-    private View view;
+
     ImageButton altgps, altbath, altparking;
 
     //VARIABLES DE SENSOR ACELEROMETRO, PARA FACILIDAD DE USO
@@ -111,13 +105,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     //marcador del primer Toilet
     private static final LatLng UTPToilet = new LatLng(8.48887, -80.328052);
-    //    private static final LatLng TERPELToilet = new LatLng(8.427452,-80.29994);
-    private Marker utp_toilet, terpel_toilet;
 
     //marcadores de parking
     private static final LatLng UTPParking = new LatLng(8.488374, -80.328141);
-    //    private static final LatLng TERPELParking = new LatLng(8.427352,-80.300037);
-    private Marker utp_parking, terpel_parking;
 
     //me faltaba esot ?
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
@@ -141,17 +131,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private ArrayList<PolylineData> mPlylinesData = new ArrayList<>();
 
-    private ToiletPlaces toiletPlaces = new ToiletPlaces();
-    private ServiceLocation serviceLocation;
 
     private ArrayList<ToiletPlaces> toiletPlacesArrayList = new ArrayList<>();
     private ArrayList<ServiceLocation> serviceLocationArrayList = new ArrayList<>();
 
-    private DocumentSnapshot mLastQueryDocument;
     private String markerPlace;
     private TextView txtDistancia, txtDireccion;
 
-    private Address auxDircalle;
     private String userAddress;
 
     @Override
@@ -173,7 +159,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         textToSpeech = new TextToSpeech(this, this);
         texto_Voz(welcome);
 
-
         View bottomSheet = findViewById(R.id.bottom_sheet);
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
 
@@ -187,7 +172,34 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         SensorAcelerometroActive();
 
+        showQuestionAccebility();
     }
+
+
+    private void showQuestionAccebility() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MapsActivity.this);
+        builder.setTitle(R.string.title_dialog);
+        builder.setMessage(R.string.message_dialog)
+                .setPositiveButton("Sí", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Log.d("Dialog LOG ","Respuesta si de dialogo");
+                        if (userLocation != null){
+                            textToSpeech.stop();
+                            Intent al = new Intent(MapsActivity.this, AlternativaMapa.class);
+                            al.putExtra("position_user",userLocation);
+                            startActivity(al);
+                        }
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Log.d("Dialog LOG ","Respuesta no de dialogo");
+                    }
+                }).show();
+    }
+
 
     //Metodo creador de marcadores de la data obtenida de firebaseStore
     public void makingMarkerFromFireBaseStore() {
@@ -240,11 +252,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }//fin del metodo
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu, menu);
-        return true;
-    }
+
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -259,19 +267,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         }
         return super.onKeyDown(keyCode, event);
-    }
-
-
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.estadistica) {
-            Intent stadistic = new Intent(MapsActivity.this, estadistica.class);
-            startActivity(stadistic);
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     //metodo que obtiene la data del FireBase relacionada a los servicios
@@ -293,13 +288,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             //la clase toiletPlaces
                             toiletPlacesArrayList.add(toiletp);
                         }
-//                    for (ToiletPlaces toiletPlacesRow : toiletPlacesArrayList) {
-//                        Log.d(TAG, "Data de ToiletInfo " + toiletPlacesRow.getNamePlace()
-//                                + " posicion " + toiletPlacesRow.getIcon());
-//                    }
-//                    Mensaje("Consulta WINS 1!!!");
                     } else {
-                    Log.d(TAG, "ERROR en consulta de info services" );
+                        Log.d(TAG, "ERROR en consulta de info services" );
                     }
                 }
             });
@@ -325,7 +315,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         serviceLocationArrayList.clear();
                         serviceLocationArrayList = new ArrayList<>();
                         for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                            Log.d(TAG, "data >> " + doc.getData());
                             ServiceLocation services = doc.toObject(ServiceLocation.class);
                             serviceLocationArrayList.add(services);
                         }
@@ -342,17 +331,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private void init() {
         Log.d(TAG, "init: initializing");
-
-        //BUTTON CLICK LISTENER PARA OBTENER LA POSICION ACTUAL
-       /* mGps.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "onClick: clicked gps icon");
-                getDeviceLocation();
-                moveCamera(new LatLng(userLocation.getLatitude(), userLocation.getLongitude()), 15f, null);
-                textToSpeech.speak("Tu ubicación es la siguiente " + userAddress, TextToSpeech.QUEUE_FLUSH, null);
-            }
-        });*/
 
         altgps.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -381,35 +359,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         15f, null);
             }
         });
-
-//        METODO ANINIMO QUE CUANDO ES PRESIONADO, MEUVE LA CAMARA AL MARCADOR DE
-//        BATH MAS CERCANO
-        /*bBath.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "BotonMoverCamaraBath: clicked bBath icon");
-                moveCamera(new LatLng(UTPToilet.latitude, UTPToilet.longitude),
-                        15f, null);
-            }
-        });
-        /* METODO ANINIMO QUE CUANDO ES PRESIONADO, MEUVE LA CAMARA AL MARCADOR DE
-        BATH MAS CERCANO
-        bPArk.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "BotonMoverCamaraParking: clicked bPark icon");
-                moveCamera(new LatLng(UTPParking.latitude, UTPParking.longitude),
-                        15f, null);
-
-            }
-        });*/
-
-//        bMicro.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                setupVoiceRecognicion();
-//            }
-//        });
 
         bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
@@ -445,12 +394,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
      */
     @Override
     public void onMapReady(final GoogleMap googleMap) {
-        Toast.makeText(this, "Map is Ready", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "Map is Ready", Toast.LENGTH_SHORT).show();
         Log.d(TAG, "onMapReady: map is ready");
         mMap = googleMap;
         mMap.setOnPolylineClickListener(this);
         if (mLocationPermissionsGranted) {
-            //getDeviceLocation(); ha sido comentado para test en j5 movidis
 
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                     != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
@@ -498,18 +446,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             // funcion de voz diciendo que no posee sensor acelerometro
             Toast.makeText(this, "algo esta fallando", Toast.LENGTH_LONG).show();
         } else {
-//                Toast.makeText(this, "DEBERIA FUNCIONAR", Toast.LENGTH_LONG).show();
             sensorEventListener = new SensorEventListener() {
                 @Override
                 public void onSensorChanged(SensorEvent sensorEvent) {
                     float x = sensorEvent.values[0];
                     if (x < -5) {
+//                        textToSpeech.stop();
                         Intent i = new Intent(MapsActivity.this, AlternativaMapa.class);
-//                        i.putExtra("lugarService","Universidad Tecnologica de Panama - Cocle");
-//                        i.putExtra("LugaresServicios",serviceLocationArrayList);
                         i.putExtra("position_user",userLocation);
                         startActivity(i);
-                        //textToSpeech.stop();
                         stop();
                     }
                 }
@@ -520,16 +465,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 }
             };
         }
-//        }else { //fin de la condicion del estado del bottomSheet
-//            Toast.makeText(this, "BS NO Collapse", Toast.LENGTH_LONG).show();
-//        }
     }
 
     //metodo relacionado al sensor acelerometro
     private void start() {
         sensorManager.registerListener(sensorEventListener, sensor, SensorManager.SENSOR_DELAY_NORMAL);
-        getDeviceLocation();
-        //moveCamera(new LatLng(userLocation.getLatitude(),userLocation.getLongitude()),15f,null);
     }
 
     //metodo relacionado al sensor acelerometro
@@ -551,24 +491,23 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     protected void onResume() {
-        start();
         super.onResume();
+        start();
         textToSpeech.speak("Has vuelto al mapa de navegación", TextToSpeech.QUEUE_FLUSH, null);
         getDeviceLocation();
+        focusCameraCurrentLocation(userLocation);
+        textToSpeech.speak("Tu ubicación es la siguiente " + userAddress,TextToSpeech.QUEUE_ADD,null);
+    }
+
+    protected void onStart() {
+
+        super.onStart();
     }
 
     private void moveCamera(LatLng latLng, float zoom, String title) {
         Log.d(TAG, "moveCamera: moving the camera to: lat: " + latLng.latitude + ", lng: " + latLng.longitude);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
 
-//        if (!title.equals("My Location")) {
-//            MarkerOptions options = new MarkerOptions()
-//                    .position(latLng)
-//                    .title(title);
-//            mMap.addMarker(options);
-//        }else{
-//            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
-//        }
     }// fin moveCamera
 
     //metodo para el calculo de direcciones
@@ -669,6 +608,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
+    private void focusCameraCurrentLocation(Location location){
+        try{
+            moveCamera(new LatLng(location.getLatitude(),location.getLongitude()),15f,"");
+        }catch (Exception e){
+            Log.e("ERROR ","userlocation es igual a null "+e.getMessage());
+        }
+    }
+
     //    me faltaba este metoo?
     private void getDeviceLocation() {
         Log.d(TAG, "getDeviceLocation: getting the devices current location");
@@ -703,7 +650,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             location.getLatitude(), location.getLongitude(), 1);
                     if(!list.isEmpty()){
                         Address DirCalle = list.get(0);
-                        userAddress = DirCalle.getAddressLine(0);
+                        userAddress = DirCalle.getLocality() + ", " + DirCalle.getSubLocality() + ", " + DirCalle.getAdminArea();
                     }
                 }catch (IOException e){
                     e.printStackTrace();
@@ -717,7 +664,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                                 location.getLatitude(), location.getLongitude(), 1);
                         if(!list.isEmpty()){
                             Address DirCalle = list.get(0);
-                            userAddress = DirCalle.getAddressLine(0);
+                            userAddress = DirCalle.getLocality() + ", " + DirCalle.getSubLocality() + ", " + DirCalle.getAdminArea();
                         }
                     }catch (IOException e){
                         e.printStackTrace();
@@ -796,10 +743,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 * */
 //                Se coloca en bottomSheet la previewInformation de el lugar destino
                 txtDistancia.setText(polylineData.getLeg().distance.toString());
-                txtDireccion.setText(polylineData.getLeg().endAddress);
+                txtDireccion.setText(markerPlace);
                 //TEXTO A VOZ
-                textToSpeech.speak("Destino "+ polylineData.getLeg().endAddress +
-                                " a " + polylineData.getLeg().distance.toString() + " de distancia",
+                String addres_from = getFirstAddres(polylineData.getLeg().startAddress);
+                String addres_to = getFirstAddres(polylineData.getLeg().endAddress);
+                String message = "Desde tu ubicación " + addres_from + " a " + markerPlace;
+                textToSpeech.speak(message +
+                                ", son " + polylineData.getLeg().distance.toString() + " de distancia",
                         TextToSpeech.QUEUE_FLUSH,null);
 
             }else{
@@ -808,6 +758,19 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         }
     } //fin del metodo onPolylineClick
+
+    private String getFirstAddres(String addres){
+        try{
+            String[] arrOfstr = addres.split(",");
+            String from = arrOfstr[0] + ", "+ arrOfstr[1];
+            return from;
+        }catch (Exception e){
+            Log.e("Error split string","Message: " + e.getMessage());
+        }finally {
+            String[] arrOfstr = addres.split(",");
+            return arrOfstr[0];
+        }
+    }
 
     public void zoomRoute(List<LatLng> lstLatLngRoute) {
 
@@ -843,59 +806,62 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     private void texto_Voz(String cadena) {
-        int acumulador=0;
-        double rlatitud=0, rlongitud=0;
-        ArrayList<String> nombreLugares = new ArrayList<>();
-        if (cadena.contains("Coclé") || cadena.contains("penonomé") || cadena.contains("coclé")){
-            textToSpeech.speak("Iniciando busqueda",TextToSpeech.QUEUE_FLUSH,null);
-            for (ServiceLocation objServicelocat : serviceLocationArrayList){
-                if (objServicelocat.getPlace_description().getName_place().contains("Cocle")){
-                    acumulador += 1;
-                    nombreLugares.add(objServicelocat.getPlace_description().getName_place());
-                    rlatitud = objServicelocat.getPosition_lat_long().getLatitude();
-                    rlongitud = objServicelocat.getPosition_lat_long().getLongitude();
-
-                }else{
-                    break;
-                }
-            }
-            if (acumulador != 0){
-                moveCamera(new LatLng(rlatitud,rlongitud),13f,"");
-                String number = Integer.toString(acumulador);
-
-                textToSpeech.speak("Existen " + number + " cantida de baños y estacionamiento en los suiguientes lugares",
-                        TextToSpeech.QUEUE_FLUSH,null);
-                for (int i=0;i<nombreLugares.size();i++){
-                    textToSpeech.speak(nombreLugares.get(i),TextToSpeech.QUEUE_FLUSH,null);
-                }
-            }else{
-                textToSpeech.speak("Lo sentimos, aun no tenemos cobertura sobre este lugar",TextToSpeech.QUEUE_FLUSH,null);
-            }
-        }else if (cadena.contains("Anton")){
-            textToSpeech.speak("Existe servicio, pero no esta cubierto.",TextToSpeech.QUEUE_FLUSH,null);
+//        int acumulador=0;
+//        double rlatitud=0, rlongitud=0;
+//        ArrayList<String> nombreLugares = new ArrayList<>();
+//        if (cadena.contains("Coclé") || cadena.contains("penonomé") || cadena.contains("coclé")){
+//            textToSpeech.speak("Iniciando busqueda",TextToSpeech.QUEUE_FLUSH,null);
+//            for (ServiceLocation objServicelocat : serviceLocationArrayList){
+//                if (objServicelocat.getPlace_description().getName_place().contains("Cocle")){
+//                    acumulador += 1;
+//                    nombreLugares.add(objServicelocat.getPlace_description().getName_place());
+//                    rlatitud = objServicelocat.getPosition_lat_long().getLatitude();
+//                    rlongitud = objServicelocat.getPosition_lat_long().getLongitude();
+//
+//                }else{
+//                    break;
+//                }
+//            }
+//            if (acumulador != 0){
+//                moveCamera(new LatLng(rlatitud,rlongitud),13f,"");
+//                String number = Integer.toString(acumulador);
+//
+//                textToSpeech.speak("Existen " + number + " cantida de baños y estacionamiento en los suiguientes lugares",
+//                        TextToSpeech.QUEUE_FLUSH,null);
+//                for (int i=0;i<nombreLugares.size();i++){
+//                    textToSpeech.speak(nombreLugares.get(i),TextToSpeech.QUEUE_FLUSH,null);
+//                }
+//            }else{
+//                textToSpeech.speak("Lo sentimos, aun no tenemos cobertura sobre este lugar",TextToSpeech.QUEUE_FLUSH,null);
+//            }
+//        }else if (cadena.contains("Anton")){
+//            textToSpeech.speak("Existe servicio, pero no esta cubierto.",TextToSpeech.QUEUE_FLUSH,null);
+//        }
+//
+//        if (cadena.contains("Dónde") || cadena.contains("Cuál") || cadena.contains("dónde") || cadena.contains("cuál")){
+//            if (cadena.contains("ubicación") || cadena.contains("encuentro") || cadena.contains("estoy")){
+//                String auxUserAddress = "";
+//                if (userAddress != null){
+//                    if (rstlocation == false){
+//                        textToSpeech.speak("Tu ubicación es la siguiente " + userAddress,TextToSpeech.QUEUE_FLUSH,null);
+//                        moveCamera(new LatLng(userLocation.getLatitude(),userLocation.getLongitude()),15f,null);
+//                        auxUserAddress = userAddress;
+//
+//                    }else{
+//                        if (!auxUserAddress.equals(userAddress)){
+//                            textToSpeech.speak("Tu ubicación es la siguiente " + userAddress,TextToSpeech.QUEUE_FLUSH,null);
+//                            moveCamera(new LatLng(userLocation.getLatitude(),userLocation.getLongitude()),15f,null);
+//                            auxUserAddress = userAddress;
+//                        }
+//                    }
+//                }
+//            }
+//        }
+        if (textToSpeech.isSpeaking()){
+            textToSpeech.speak(cadena,TextToSpeech.QUEUE_ADD,null);
+        }else if (!textToSpeech.isSpeaking()){
+            textToSpeech.speak(cadena,TextToSpeech.QUEUE_FLUSH,null);
         }
-
-        if (cadena.contains("Dónde") || cadena.contains("Cuál") || cadena.contains("dónde") || cadena.contains("cuál")){
-            if (cadena.contains("ubicación") || cadena.contains("encuentro") || cadena.contains("estoy")){
-                String auxUserAddress = "";
-                if (userAddress != null){
-                    if (rstlocation == false){
-                        textToSpeech.speak("Tu ubicación es la siguiente " + userAddress,TextToSpeech.QUEUE_FLUSH,null);
-                        moveCamera(new LatLng(userLocation.getLatitude(),userLocation.getLongitude()),15f,null);
-                        auxUserAddress = userAddress;
-
-                    }else{
-                        if (!auxUserAddress.equals(userAddress)){
-                            textToSpeech.speak("Tu ubicación es la siguiente " + userAddress,TextToSpeech.QUEUE_FLUSH,null);
-                            moveCamera(new LatLng(userLocation.getLatitude(),userLocation.getLongitude()),15f,null);
-                            auxUserAddress = userAddress;
-                        }
-                    }
-                }
-            }
-        }
-
-        textToSpeech.speak(cadena,TextToSpeech.QUEUE_FLUSH,null);
         //textToSpeech.speak("",TextToSpeech.QUEUE_FLUSH,null);
     }
 

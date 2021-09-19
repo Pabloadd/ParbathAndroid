@@ -41,6 +41,16 @@ public class AlternativaMapa extends AppCompatActivity implements TextToSpeech.O
         textToSpeech.speak("Has vuelto a la lista de lugares de interes.",TextToSpeech.QUEUE_FLUSH,null);
     }
 
+    protected void onPause() {
+        textToSpeech.stop();
+        super.onPause();
+    }
+
+    protected void onDestroy() {
+        textToSpeech.stop();
+        super.onDestroy();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,9 +91,12 @@ public class AlternativaMapa extends AppCompatActivity implements TextToSpeech.O
                     serviceLocations.clear();
                     serviceLocations = new ArrayList<>();
                     for (QueryDocumentSnapshot doc : queryDocumentSnapshots){
+                        Log.i("LOG AL > ","doc query  "+ doc.getData());
                         ServiceLocation servs = doc.toObject(ServiceLocation.class);
+                        Log.i("LOG AL > ","Data object "+ servs);
                         serviceLocations.add(servs);
                     }
+
                     ListaMarcadores();
                 }
             }

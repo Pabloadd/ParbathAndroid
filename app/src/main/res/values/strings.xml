@@ -30,4 +30,7 @@
     <string name="label_nombre_formulario">Apellido</string>
     <string name="label_reporte_formulario">Reporte / Comentario</string>
     <string name="hint_comentario_formulario">Comentario o reporte</string>
+<!--    string for module dialog -->
+    <string name="title_dialog">Atención</string>
+    <string name="message_dialog">¿Sufres de alguna discapacidad visual? Se le enviará una lista alternativa al mapa para una mejor navegación.</string>
 </resources>
