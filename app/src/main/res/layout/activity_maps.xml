@@ -20,35 +20,52 @@
         tools:context=".MapsActivity" />
 
     <ImageButton
+        android:id="@+id/info_btn"
+        style="@style/Widget.AppCompat.ImageButton"
+        android:layout_width="62dp"
+        android:layout_height="62dp"
+        android:layout_gravity="right|top"
+        android:layout_margin="15dp"
+        android:background="@drawable/backgroundbottom"
+        android:contentDescription="@string/info_boton"
+        android:scaleType="fitCenter"
+        app:srcCompat="@drawable/ic_info_outline" />
+
+    <ImageButton
         android:id="@+id/imgbtn_bath"
-        android:layout_width="101dp"
+        android:layout_width="115dp"
         android:layout_height="62dp"
         android:layout_gravity="bottom|start"
         android:layout_marginStart="16dp"
         android:layout_marginBottom="16dp"
         android:background="@drawable/backgroundbottom"
         android:contentDescription="@string/boton_bath"
+        android:padding="10dp"
+        android:scaleType="fitCenter"
         app:srcCompat="@drawable/ic_toilet" />
 
     <ImageButton
         android:id="@+id/imgbtn_gps"
-        android:layout_width="101dp"
+        android:layout_width="115dp"
         android:layout_height="62dp"
         android:layout_gravity="bottom|center"
         android:layout_marginBottom="16dp"
         android:background="@drawable/backgroundbottom"
         android:contentDescription="@string/boton_posicion"
-        app:srcCompat="@drawable/ic_position" />
+        android:scaleType="fitCenter"
+        app:srcCompat="@drawable/ic_gps" />
 
     <ImageButton
         android:id="@+id/imgbtn_parking"
-        android:layout_width="101dp"
+        android:layout_width="115dp"
         android:layout_height="62dp"
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:background="@drawable/backgroundbottom"
         android:contentDescription="@string/boton_parking"
+        android:padding="10dp"
+        android:scaleType="fitCenter"
         app:srcCompat="@drawable/ic_parking" />
 
 

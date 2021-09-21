@@ -1,6 +1,8 @@
 package com.parbathprojectmaps;
 
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.speech.tts.TextToSpeech;
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,9 +10,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -22,6 +27,7 @@ import com.parbathprojectmaps.Models.ServiceLocation;
 import com.parbathprojectmaps.util.CustomAdpaterMapa;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import javax.annotation.Nullable;
@@ -34,6 +40,8 @@ public class AlternativaMapa extends AppCompatActivity implements TextToSpeech.O
     private FirebaseFirestore mDb;
     private TextToSpeech textToSpeech;
     private Location location_user;
+    ImageButton gps_btn;
+    String address_user;
 
     @Override
     protected void onResume() {
@@ -59,11 +67,39 @@ public class AlternativaMapa extends AppCompatActivity implements TextToSpeech.O
         listView = (ListView) findViewById(R.id.list_servicelocation);
         textToSpeech = new TextToSpeech(this,this);
         mDb = FirebaseFirestore.getInstance();
-
+        gps_btn = (ImageButton) findViewById(R.id.gps_imgbtn);
         Bundle bundle = new Bundle(getIntent().getExtras());
         location_user = (Location) bundle.get("position_user");
         consultaPositionServices();
         sentitizador("Welcome");
+        inicializadorBotones();
+    }
+
+    private void inicializadorBotones() {
+        gps_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String auxAddresUser = getAddressUser();
+                textToSpeech.speak("Tu ubicación es la siguiente " + auxAddresUser, TextToSpeech.QUEUE_FLUSH, null);
+            }
+        });
+    }
+
+    private String getAddressUser(){
+        try{
+            Geocoder geocoder = new Geocoder(this,Locale.getDefault());
+            List<Address> listAddress = geocoder.getFromLocation(location_user.getLatitude(),location_user.getLongitude(),1);
+            if(!listAddress.isEmpty()){
+                Address direccion = listAddress.get(0);
+                address_user = direccion.getLocality() + ", " + direccion.getSubLocality() + ", " + direccion.getAdminArea();
+            }else {
+                address_user = "No es posible determinar su ubicacion, intente más tarde";
+            }
+        }catch (Exception e){
+            Log.e("ERROR", "while getting user address: " + e.getMessage());
+            address_user = "No es posible determinar su ubicacion, intente más tarde";
+        }
+        return address_user;
     }
 
     private void sentitizador(String welcome) {
@@ -116,8 +152,6 @@ public class AlternativaMapa extends AppCompatActivity implements TextToSpeech.O
             }
         });
     }
-
-
 
     private void itemFromListSelected(String nombreLugar) {
         Intent intent = new Intent(AlternativaMapa.this,ListService.class);

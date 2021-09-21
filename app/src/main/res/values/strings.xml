@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">PARBATH</string>
-    <string name="title_activity_maps">PARBATH</string>
+    <string name="app_name" translatable="false">PARBATH</string>
+    <string name="title_activity_maps" translatable="false">PARBATH</string>
     <string name="estadistica_layout">Estadistica</string>
     <string name="boton_opciones">Boton opciones de servicios y localización</string>
     <string name="boton_posicion">Boton para determinar su posicion actual</string>
@@ -10,13 +10,9 @@
     <string name="getLugares">places_information</string>
     <string name="getPosicionLugares">markers_map</string>
     <string name="getReportes">Reportes</string>
-    <string name="mensaje_bienvenida">Bienvenido a PAR BATH, a continuación se presenta
-        un mapa y 4 opciones, 1 se encuentra la opción para encontrar el sanitario más
-        cercano, arriba de esta opción se encuentra un botón para el reconocimiento que te
-        podría ser de ayuda, continuando en la parte inferior central se encuentra la opción
-        para determinar su ubicación actual, y a la derecha se encuentra el botón para encontrar el estacionamiento más cercano.</string>
+    <string name="mensaje_bienvenida">Bienvenido a PARBATH, los elementos en esta visual son: un mapa, un botón para encontrar el sanitario más cercano, un botón para determinar su ubicación actual, y un botón para encontrar el estacionamiento más cercano. Puedes girar a la derecha el dispositivo movil para acceder a una interfaz alternativa al mapa.</string>
     <string name="interfazreporte">A continuación se presenta un formulario, primero deberas colocar tu nombre, seguido de apellido, y por ultimo
-    dejar tu comentario, reporte u opinión. Seguido del campo para dejar tu queja o comentario, puedes calificar a través de un máximo de 5 estrellas.</string>
+    dejar tu comentario, reporte u opinión. Seguido del campo para dejar tu queja o comentario, puedes calificar a través de un máximo de 5 estrellas. </string>
     <string name="desc_btn_reporte">botón para dejar tu comentario o experiencia sobre el lugar visitado</string>
     <string name="descripcion_nombre_formulario">Puede insertar aqui su nombre.</string>
     <string name="descripcion_apellido_formulario">Puede insertar aqui su apellido.</string>
@@ -25,12 +21,16 @@
     <string name="descripcion_boton_formulario">Boton para enviar la evaluacion.</string>
     <string name="label_evaluar_formulario">Evalúanos</string>
     <string name="label_btn_enviar_formulario">Enviar</string>
-    <string name="label_reporteopinion_formulario">Reporte u Opinión</string>
-    <string name="label_apellido_formulario">Nombre</string>
-    <string name="label_nombre_formulario">Apellido</string>
+    <string name="label_reporteopinion_formulario">Comentario u Opinión</string>
+    <string name="label_apellido_formulario">Apellido</string>
+    <string name="label_nombre_formulario">Nombre</string>
     <string name="label_reporte_formulario">Reporte / Comentario</string>
     <string name="hint_comentario_formulario">Comentario o reporte</string>
 <!--    string for module dialog -->
     <string name="title_dialog">Atención</string>
     <string name="message_dialog">¿Sufres de alguna discapacidad visual? Se le enviará una lista alternativa al mapa para una mejor navegación.</string>
+    <!--  end  string for module dialog -->
+    <!-- string for info button -->
+    <string name="info_boton">Boton para obtener más información.</string>
+    <!-- end string for info buttom -->
 </resources>

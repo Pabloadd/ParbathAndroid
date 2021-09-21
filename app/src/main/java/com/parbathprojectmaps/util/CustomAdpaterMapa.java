@@ -84,11 +84,12 @@ public class CustomAdpaterMapa extends ArrayAdapter<ServiceLocation> implements 
         String message = "?";
         String distance_str = "";
         float auxdistance_to = 0;
-        if (distance_to >= 1000.0){
-            auxdistance_to = distance_to / 1000;
+        float limitDistance = 1000;
+        if (distance_to >= limitDistance){
+            auxdistance_to = distance_to / limitDistance;
             distance_str = format_float.format(auxdistance_to);
-            message = String.valueOf(distance_str) + " km";
-        }else if (distance_to < 1000.0){
+            message = String.valueOf(distance_str) + " kilometros";
+        }else if (distance_to < limitDistance){
             distance_str = format_float.format(auxdistance_to);
             message = String.valueOf(distance_str) + " metros";
         }

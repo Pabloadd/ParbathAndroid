@@ -85,7 +85,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private GoogleMap mMap;
     //    private ImageView mGps; este fue reemplazodo por floating button
 
-    ImageButton altgps, altbath, altparking;
+    ImageButton altgps, altbath, altparking, infobtn;
 
     //VARIABLES DE SENSOR ACELEROMETRO, PARA FACILIDAD DE USO
     SensorManager sensorManager;
@@ -131,14 +131,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private ArrayList<PolylineData> mPlylinesData = new ArrayList<>();
 
-
     private ArrayList<ToiletPlaces> toiletPlacesArrayList = new ArrayList<>();
     private ArrayList<ServiceLocation> serviceLocationArrayList = new ArrayList<>();
 
     private String markerPlace;
     private TextView txtDistancia, txtDireccion;
 
-    private String userAddress;
+    public String userAddress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,6 +148,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         altgps = (ImageButton) findViewById(R.id.imgbtn_gps);
         altbath = (ImageButton) findViewById(R.id.imgbtn_bath);
         altparking = (ImageButton) findViewById(R.id.imgbtn_parking);
+        infobtn = (ImageButton) findViewById(R.id.info_btn);
 
         mDb = FirebaseFirestore.getInstance();
         txtDistancia = (TextView) findViewById(R.id.textView7);
@@ -172,7 +172,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         SensorAcelerometroActive();
 
-        showQuestionAccebility();
+//        showQuestionAccebility();
     }
 
 
@@ -360,6 +360,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
 
+        infobtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                texto_Voz(getResources().getString(R.string.mensaje_bienvenida));
+            }
+        });
+
         bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
@@ -451,7 +458,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 public void onSensorChanged(SensorEvent sensorEvent) {
                     float x = sensorEvent.values[0];
                     if (x < -5) {
-//                        textToSpeech.stop();
+                        textToSpeech.stop();
                         Intent i = new Intent(MapsActivity.this, AlternativaMapa.class);
                         i.putExtra("position_user",userLocation);
                         startActivity(i);
@@ -749,7 +756,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 String addres_to = getFirstAddres(polylineData.getLeg().endAddress);
                 String message = "Desde tu ubicación " + addres_from + " a " + markerPlace;
                 textToSpeech.speak(message +
-                                ", son " + polylineData.getLeg().distance.toString() + " de distancia",
+                                ", son " + polylineData.getLeg().distance.toString() + " kilometros de distancia",
                         TextToSpeech.QUEUE_FLUSH,null);
 
             }else{

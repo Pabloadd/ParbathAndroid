@@ -87,9 +87,7 @@ public class  InformacionToilet extends AppCompatActivity implements TextToSpeec
         sliderAdapter = new SliderAdapter(this);
         slider.setAdapter(sliderAdapter);
 
-       // altbtn_speaker = (ImageView) findViewById(R.id.imgbtn_speaker);
         altbtn_reporte = (ImageView) findViewById(R.id.imgbtn_reporte);
-
 
         Bundle bundle = new Bundle(getIntent().getExtras());
         iconSelectedForImages = bundle.getString("keyTipo");
@@ -113,7 +111,7 @@ public class  InformacionToilet extends AppCompatActivity implements TextToSpeec
         textubiacion.setText(ubicacion);
         texthorario.setText(horario);
         txtmoreInfo.setText(descripcion);
-
+        textestado.setText("Información no disponible.");
         textToSpeech = new TextToSpeech(this,this);
         textA_Voz("Welcome");
         consultaReporteServicio(lugarService);
@@ -124,18 +122,12 @@ public class  InformacionToilet extends AppCompatActivity implements TextToSpeec
             @Override
             public void onClick(View v) {
                 Intent report = new Intent(InformacionToilet.this,formulario.class);
-                report.putExtra("ubicacion",ubicacion);
+                report.putExtra("ubicacion",lugarService);
                 startActivity(report);
 
             }
         });
 
-
-
-
-
-
-        textToSpeech.speak("Hola",TextToSpeech.QUEUE_FLUSH,null);
         setDataLayout();
 
     }// fin oncreate
@@ -223,9 +215,14 @@ public class  InformacionToilet extends AppCompatActivity implements TextToSpeec
         dataRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                String value = (dataSnapshot.getValue(String.class));
-                textestado.setText(value);
-                Log.e(TAG,"consulta RTDB: " + value);
+                String serviceStatus = "";
+                serviceStatus = (dataSnapshot.getValue(String.class));
+                if (serviceStatus.isEmpty()){
+                    textestado.setText("Información no disponible.");
+                }else{
+                    textestado.setText(serviceStatus);
+                }
+                Log.e(TAG,"consulta RTDB: " + serviceStatus);
             }
 
             @Override
@@ -233,11 +230,6 @@ public class  InformacionToilet extends AppCompatActivity implements TextToSpeec
                 Log.w(TAG,"Fallo en lectura RTDB: "+ databaseError);
             }
         });
-    }
-
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu, menu);
-        return true;
     }
 
 //    METODOS DE TEXTO A VOZ Y ASISTENTE DE VOZ
@@ -275,7 +267,7 @@ public class  InformacionToilet extends AppCompatActivity implements TextToSpeec
             String string_content = "La informacion del servicio que seleccionaste es la siguiente: "+
                     "Ubicacion" + textubiacion.getText().toString() +
                     ". Horario " + texthorario.getText().toString() +
-                    ". El servicio se encuentra " + textestado.getText().toString() +"para su uso" +
+                    ". El servicio se encuentra: " + textestado.getText().toString() +
                     ". Informacion extra es "+ txtmoreInfo.getText().toString();
             textToSpeech.speak(string_content,TextToSpeech.QUEUE_FLUSH,null);
         }
