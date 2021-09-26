@@ -71,9 +71,7 @@ public class CustomAdapterComentarios extends ArrayAdapter<Reporte>
         viewHolder.txtNombre.setText(reporte.getNombre() + " " + reporte.getApellido());
         try {
 
-            viewHolder.txtHoraComent.setText((String.valueOf( reporte.getTimestamp().getDate() + " / "+
-                    reporte.getTimestamp().getMonth() + " / " +
-                    reporte.getTimestamp().getYear() )));
+            viewHolder.txtHoraComent.setText(reporte.getTimestamp());
         } catch (Exception e) {
             e.printStackTrace();
         }

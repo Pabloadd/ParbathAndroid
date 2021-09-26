@@ -141,7 +141,17 @@ public class  InformacionToilet extends AppCompatActivity implements TextToSpeec
     @Override
     protected void onResume() {
         super.onResume();
-        textToSpeech.speak("en resumen",TextToSpeech.QUEUE_FLUSH,null);
+//        textToSpeech.speak("en resumen",TextToSpeech.QUEUE_FLUSH,null);
+    }
+
+    protected void onDestroy() {
+        textToSpeech.stop();
+        super.onDestroy();
+    }
+
+    protected void onStop() {
+        textToSpeech.stop();
+        super.onStop();
     }
 
     private void pasarData() {

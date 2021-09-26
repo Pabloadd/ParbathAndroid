@@ -1,9 +1,12 @@
 package com.parbathprojectmaps;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import androidx.annotation.NonNull;
 import com.google.android.material.snackbar.Snackbar;
+
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -17,6 +20,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.parbathprojectmaps.Models.Reporte;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.Locale;
 
 public class formulario extends AppCompatActivity implements TextToSpeech.OnInitListener {
@@ -58,6 +63,7 @@ public class formulario extends AppCompatActivity implements TextToSpeech.OnInit
 
     }// fin onCreate
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void saveReporte(View ve){
 
 
@@ -66,12 +72,13 @@ public class formulario extends AppCompatActivity implements TextToSpeech.OnInit
         DocumentReference newReporte = db.collection("Reportes")
                 .document();
         final View v = ve;
+        String fecha_actual = getLocalDate();
         Reporte reporte = new Reporte();
         reporte.setNombre(eNombre.getText().toString());
         reporte.setApellido(eApellido.getText().toString());
         reporte.setOpinion(eOpinion.getText().toString());
         reporte.setRatestars(valo.getRating());
-        reporte.setTimestamp(null);
+        reporte.setTimestamp(fecha_actual);
         reporte.setUbicacionReporte(ubicaionReporte);
         reporte.setReport_id(newReporte.getId());
 
@@ -97,7 +104,12 @@ public class formulario extends AppCompatActivity implements TextToSpeech.OnInit
         eApellido.setText("");
         eOpinion.setText("");
         valo.setRating(0);
+    }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private String getLocalDate(){
+        LocalDate localDate = LocalDate.now();
+        return localDate.toString();
     }
 
     @Override

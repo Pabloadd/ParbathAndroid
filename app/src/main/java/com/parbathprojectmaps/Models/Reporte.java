@@ -10,9 +10,9 @@ public class Reporte implements Parcelable {
     private String nombre, apellido, opinion, report_id, ubicacionReporte;
     private Float ratestars;
 //    Timestamp timesserver =
-    private Date timestamp;
+    private String timestamp;
 
-    public Reporte(String nombre, String apellido, String opinion, Float ratestars, Date timestamp,
+    public Reporte(String nombre, String apellido, String opinion, Float ratestars, String timestamp,
                    String report_id, String ubicacionReporte) {
         this.nombre = nombre;
         this.apellido = apellido;
@@ -83,11 +83,11 @@ public class Reporte implements Parcelable {
         this.ratestars = ratestars;
     }
 
-    public Date getTimestamp() {
+    public String getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(Date timestamp) {
+    public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
     }
 
@@ -131,6 +131,6 @@ public class Reporte implements Parcelable {
         parcel.writeString(opinion);
         parcel.writeString(report_id);
         parcel.writeFloat(ratestars);
-        parcel.writeString(String.valueOf(timestamp));
+        parcel.writeString(timestamp);
     }
 }
