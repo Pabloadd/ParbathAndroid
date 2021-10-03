@@ -50,7 +50,7 @@ public class formulario extends AppCompatActivity implements TextToSpeech.OnInit
         valo = (RatingBar) findViewById(R.id.ratingBar);
 
         btn4 = (Button) findViewById(R.id.button4);
-        infointerface = String.valueOf(R.string.interfazreporte);
+        infointerface = getResources().getString(R.string.interfazreporte);
         btn4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -118,7 +118,6 @@ public class formulario extends AppCompatActivity implements TextToSpeech.OnInit
             int lang = tts.setLanguage(Locale.getDefault());
             if (lang == TextToSpeech.LANG_NOT_SUPPORTED || lang == TextToSpeech.LANG_MISSING_DATA){
                 Toast.makeText(this, "Lenguaje no soportado", Toast.LENGTH_SHORT).show();
-
             }else{
                 textoavoz(infointerface);
             }
@@ -127,5 +126,13 @@ public class formulario extends AppCompatActivity implements TextToSpeech.OnInit
 
     public void textoavoz(String s){
         tts.speak(s,TextToSpeech.QUEUE_FLUSH,null);
+    }
+
+    protected void onDestroy() {
+        if(tts != null){
+            tts.stop();
+            tts.shutdown();
+        }
+        super.onDestroy();
     }
 }

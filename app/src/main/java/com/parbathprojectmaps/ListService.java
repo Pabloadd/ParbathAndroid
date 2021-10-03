@@ -72,7 +72,10 @@ public class ListService extends AppCompatActivity implements TextToSpeech.OnIni
 
     @Override
     protected void onDestroy() {
-        textoAvoz.shutdown();
+        if(textoAvoz != null){
+            textoAvoz.stop();
+            textoAvoz.shutdown();
+        }
         super.onDestroy();
     }
 

@@ -26,6 +26,7 @@
         android:theme="@style/AppTheme">
         <activity android:name="com.parbathprojectmaps.AlternativaMapa"></activity>
         <activity android:name="com.parbathprojectmaps.FullScreen" />
+<!--        <uses-library android:name="org.apache.http.legacy" android:required="false" />-->
         <activity
             android:name="com.parbathprojectmaps.MapsActivity"
             android:label="@string/title_activity_maps"

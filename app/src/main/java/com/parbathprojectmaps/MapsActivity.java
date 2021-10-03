@@ -337,8 +337,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             public void onClick(View view) {
                 Log.d(TAG, "onClick: clicked gps icon");
                 getDeviceLocation();
-                moveCamera(new LatLng(userLocation.getLatitude(), userLocation.getLongitude()), 15f, null);
-                textToSpeech.speak("Tu ubicación es la siguiente " + userAddress, TextToSpeech.QUEUE_FLUSH, null);
+                try {
+                    moveCamera(new LatLng(userLocation.getLatitude(), userLocation.getLongitude()), 15f, null);
+                    textToSpeech.speak("Tu ubicación es la siguiente " + userAddress, TextToSpeech.QUEUE_FLUSH, null);
+                }catch (Exception e){
+                    Log.e("ERROR LOCATION","Todavia no se obtiene posicion de usuario, intenta unos segundos despues");
+                }
             }
         });
 
@@ -486,7 +490,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     protected void onDestroy() {
-        textToSpeech.stop();
+        if(textToSpeech != null){
+            textToSpeech.stop();
+            textToSpeech.shutdown();
+        }
         super.onDestroy();
     }
 

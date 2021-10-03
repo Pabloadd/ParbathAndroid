@@ -55,7 +55,10 @@ public class AlternativaMapa extends AppCompatActivity implements TextToSpeech.O
     }
 
     protected void onDestroy() {
-        textToSpeech.stop();
+        if(textToSpeech!=null){
+            textToSpeech.stop();
+            textToSpeech.shutdown();
+        }
         super.onDestroy();
     }
 
